@@ -10,34 +10,39 @@ import {
     TableRow,
     TableCell,
     Button,
+    Spinner,
 } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
-// import exampleBattle from "../assets/ExampleBattle.png";
-import { getHeader } from "../lib/dbClient";
-import { useEffect, useState } from "react";
+import { useAppContext } from "../context/AppContext";
+import { useUser } from "../lib/swr";
+// import { getHeader } from "../lib/dbClient";
+// import { useEffect, useState } from "react";
 
 const LandingPage = () => {
+    // const { user } = useAppContext();
+    const { globalUsername } = useAppContext();
+    const { user, isLoading } = useUser(globalUsername);
     const navigate = useNavigate();
-    const [myHeader, setMyHeader] = useState();
+    // const [myHeader, setMyHeader] = useState();
 
-    useEffect(() => {
-        getHeader()
-            .then((header) => {
-                // console.log(header[0].header);
-                setMyHeader(header[0].header);
-            })
-            .catch((error) => console.log(error));
-    }, []);
-
+    // useEffect(() => {
+    //     getHeader()
+    //         .then((header) => {
+    //             // console.log(header[0].header);
+    //             setMyHeader(header[0].header);
+    //         })
+    //         .catch((error) => console.log(error));
+    // }, []);
+    if (isLoading) return <Spinner />;
     return (
         <div className="min-h-screen min-w-screen flex flex-col items-center p-4 gap-8">
             <Image src="https://fontmeme.com/permalink/231105/aa303acd63d14025e61578dd113c010e.png" />
             <Card>
                 <CardHeader className="w-full flex  justify-center">
                     <h3 className="text-4xl">
-                        {myHeader
-                            ? myHeader
-                            : "Battle with your favorite Pokemon!"}
+                        {user
+                            ? `Signed in as ${user.username}`
+                            : "Not signed in."}
                     </h3>
                 </CardHeader>
                 <CardBody className="flex flex-col items-center">

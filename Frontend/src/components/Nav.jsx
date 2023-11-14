@@ -10,15 +10,19 @@ import {
     Dropdown,
     DropdownMenu,
     Avatar,
+    Spinner,
 } from "@nextui-org/react";
 import { SearchIcon } from "../assets/SearchIcon";
 import { useAppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { editHeader } from "../lib/dbClient";
+import { useUser } from "../lib/swr";
 
 export default function Nav() {
-    const { isAuth, setToken, setIsAuth, setUser, user } = useAppContext();
+    // const { /*isAuth, setToken, setIsAuth,*/ setUser, user } = useAppContext();
+    const { globalUsername } = useAppContext();
+    const { user, isLoading } = useUser(globalUsername);
     const [localValue, setLocalValue] = useState("");
     const id = "654e77b79b55c78e142a345d";
 
@@ -36,12 +40,14 @@ export default function Nav() {
 
     const handleSignOut = () => {
         navigate("/");
-        setToken(null);
-        setIsAuth(false);
-        setUser(null);
-        localStorage.removeItem("token");
+        // setToken(null);
+        // setIsAuth(false);
+        // setUser(null);
+        // localStorage.removeItem("token");
+        localStorage.removeItem("user");
         localStorage.removeItem("chosenPokemon");
     };
+    if (isLoading) return <Spinner />;
     return (
         <Navbar isBordered>
             <NavbarContent justify="start">
@@ -105,24 +111,35 @@ export default function Nav() {
                         />
                     </DropdownTrigger>
                     <DropdownMenu aria-label="Profile Actions" variant="flat">
-                        {isAuth && (
-                            <DropdownItem key="profile" className="h-14 gap-2">
-                                <p className="font-semibold">Signed in as</p>
-                                <p className="font-semibold">{user.username}</p>
-                            </DropdownItem>
-                        )}
+                        {
+                            /*isAuth*/ user && (
+                                <DropdownItem
+                                    key="profile"
+                                    className="h-14 gap-2"
+                                >
+                                    <p className="font-semibold">
+                                        Signed in as
+                                    </p>
+                                    <p className="font-semibold">
+                                        {user.username}
+                                    </p>
+                                </DropdownItem>
+                            )
+                        }
                         <DropdownItem key="settings">My Settings</DropdownItem>
                         <DropdownItem key="team_settings">
                             Team Settings
                         </DropdownItem>
-                        {!isAuth && (
-                            <DropdownItem
-                                onClick={() => navigate("/register")}
-                                key="register"
-                            >
-                                Register
-                            </DropdownItem>
-                        )}
+                        {
+                            /*!isAuth*/ !user && (
+                                <DropdownItem
+                                    onClick={() => navigate("/register")}
+                                    key="register"
+                                >
+                                    Register
+                                </DropdownItem>
+                            )
+                        }
                         {!user ? (
                             <DropdownItem
                                 onClick={handleSignIn}
