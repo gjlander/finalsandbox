@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { ClerkProvider } from "@clerk/clerk-react";
 
 //pages for each route
 import Layout from "./pages/Layout";
@@ -8,9 +9,11 @@ import Register from "./pages/Register";
 import PokemonDisplay from "./pages/PokemonDisplay";
 import NotFound from "./pages/NotFound";
 
+const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
 function App() {
     return (
-        <>
+        <ClerkProvider publishableKey={clerkPubKey}>
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<LandingPage />} />
@@ -20,7 +23,7 @@ function App() {
                     <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>
-        </>
+        </ClerkProvider>
     );
 }
 
