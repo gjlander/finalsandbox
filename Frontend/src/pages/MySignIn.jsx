@@ -6,7 +6,7 @@ import { EyeFilledIcon } from "../assets/EyeFilledIcon.jsx";
 import { EyeSlashFilledIcon } from "../assets/EyeSlashFilledIcon.jsx";
 import { authSignInUser } from "../lib/dbClient.js";
 import { useAppContext } from "../context/AppContext.jsx";
-const SignIn = () => {
+const MySignIn = () => {
     const [form, setForm] = useState({
         username: "",
         password: "",
@@ -128,4 +128,4 @@ const SignIn = () => {
     );
 };
 
-export default SignIn;
+export default MySignIn;
