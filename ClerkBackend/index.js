@@ -1,13 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
-// import dotenv from "dotenv";
 import cors from "cors";
-// import { Webhook } from "svix";
 import { clerkWebhook } from "./clerkControllers.js";
 import bodyParser from "body-parser";
-// import ClerkUser from "./clerkUserModel.js";
-
-// dotenv.config();
 
 // Connect mongoose to database
 mongoose
