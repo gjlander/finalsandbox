@@ -28,10 +28,20 @@ app.post(
     bodyParser.raw({ type: "application/json" }),
     async function (req, res) {
         try {
+            // Check if the 'Signing Secret' from the Clerk Dashboard was correctly provided
+            const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+            if (!WEBHOOK_SECRET) {
+                throw new Error("You need a WEBHOOK_SECRET in your .env");
+            }
             const payloadString = req.body.toString();
             const svixHeaders = req.headers;
+            if (!svixHeaders) {
+                return new Response("Error occured -- no svix headers", {
+                    status: 400,
+                });
+            }
 
-            const wh = new Webhook(process.env.WEBHOOK_SECRET);
+            const wh = new Webhook(WEBHOOK_SECRET);
             const evt = wh.verify(payloadString, svixHeaders);
             const { id, ...attributes } = evt.data;
             // Handle the webhooks
