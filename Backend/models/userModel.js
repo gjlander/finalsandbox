@@ -44,16 +44,6 @@ const userSchema = new Schema(
             required: true,
             select: false,
         },
-
-        battlesWon: {
-            type: Number,
-            default: 0,
-        },
-
-        battlesLost: {
-            type: Number,
-            default: 0,
-        },
     },
 
     {
